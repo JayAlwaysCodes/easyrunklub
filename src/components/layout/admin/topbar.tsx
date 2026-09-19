@@ -1,6 +1,7 @@
 "use client";
 
-import { Menu } from "lucide-react";
+import Link from "next/link";
+import { Menu, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 
 import { UserNav } from "@/components/shared/user-nav";
@@ -39,7 +40,19 @@ export function AdminTopbar({
                 <Logo href="/admin/dashboard" />
               </SheetTitle>
             </SheetHeader>
-            <AdminNavLinks onNavigate={() => setOpen(false)} />
+            <div className="flex flex-1 flex-col">
+              <AdminNavLinks onNavigate={() => setOpen(false)} />
+              <div className="border-t p-3">
+                <Link
+                  href="/dashboard"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  Back to Member Dashboard
+                </Link>
+              </div>
+            </div>
           </SheetContent>
         </Sheet>
       </div>

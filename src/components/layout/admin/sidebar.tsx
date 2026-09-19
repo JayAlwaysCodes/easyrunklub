@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Users, Wallet2 } from "lucide-react";
+import { LayoutDashboard, Users, Wallet2, ArrowLeft } from "lucide-react";
 import { Logo } from "@/components/shared/logo";
 
 const ADMIN_NAV = [
@@ -51,6 +51,15 @@ export function AdminSidebar() {
         </span>
       </div>
       <AdminNavLinks />
+      <div className="border-t p-3">
+        <Link
+          href="/dashboard"
+          className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Member Dashboard
+        </Link>
+      </div>
     </aside>
   );
 }
