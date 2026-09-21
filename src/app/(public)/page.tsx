@@ -1,16 +1,23 @@
+import { HeroSection } from "@/components/home/hero-section";
+import { AboutSection } from "@/components/home/about-section";
+import { UpcomingEventsSection } from "@/components/home/upcoming-events-section";
+import { CommunitySection } from "@/components/home/community-section";
+import { BlogPreviewSection } from "@/components/home/blog-preview-section";
+import { MembershipBenefitsSection } from "@/components/home/membership-benefits-section";
+import { PartnersSection } from "@/components/home/partners-section";
+import { CtaSection } from "@/components/home/cta-section";
+
 export default function HomePage() {
   return (
-    <div className="p-12 space-y-4">
-      <div className="bg-brand-forest text-white p-6 rounded-lg font-heading text-2xl">
-        Forest background, heading font
-      </div>
-      <div className="bg-brand-green text-white p-6 rounded-lg font-sans">
-        Green background, body font
-      </div>
-      <div className="bg-brand-mint p-6 rounded-lg">Mint background</div>
-      <div className="bg-brand-cream border p-6 rounded-lg">
-        Cream background
-      </div>
+    <div className="bg-brand-cream">
+      <HeroSection />
+      <AboutSection />
+      <UpcomingEventsSection />
+      <CommunitySection />
+      <BlogPreviewSection />
+      <MembershipBenefitsSection />
+      <PartnersSection />
+      <CtaSection />
     </div>
   );
 }
