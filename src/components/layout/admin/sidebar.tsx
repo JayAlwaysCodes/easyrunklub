@@ -42,14 +42,14 @@ const ADMIN_NAV: NavGroup[] = [
     items: [
       { href: "/admin/dashboard/members", label: "Members", icon: Users, ready: true },
       { href: "/admin/dashboard/payments", label: "Payments", icon: CreditCard, ready: true },
-      { href: "/admin/dashboard/dues", label: "Monthly Dues", icon: Receipt, ready: false },
+      { href: "/admin/dashboard/dues", label: "Monthly Dues", icon: Receipt, ready: true },
       { href: "/admin/dashboard/runs", label: "Runs & Events", icon: CalendarDays, ready: false },
     ],
   },
   {
     heading: "Engage",
     items: [
-      { href: "/admin/dashboard/communication", label: "Communication", icon: Megaphone, ready: false },
+      { href: "/admin/dashboard/communication", label: "Communication", icon: Megaphone, ready: true },
       { href: "/admin/dashboard/moderation", label: "Moderation", icon: ShieldCheck, ready: false },
       { href: "/admin/dashboard/live", label: "Live Stream", icon: Radio, ready: false },
       { href: "/admin/dashboard/support", label: "Support", icon: LifeBuoy, ready: false },

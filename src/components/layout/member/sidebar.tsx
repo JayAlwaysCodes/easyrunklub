@@ -24,6 +24,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/shared/logo";
 import { useMemberAccess } from "@/components/layout/member/member-access";
+import { useUnreadAnnouncements } from "@/components/layout/member/unread-provider";
 
 type NavItem = {
   href: string;
@@ -63,7 +64,7 @@ const MEMBER_NAV: NavGroup[] = [
   {
     heading: "Community",
     items: [
-      { href: "/dashboard/announcements", label: "Announcements", icon: Megaphone, ready: false, access: "always" },
+      { href: "/dashboard/announcements", label: "Announcements", icon: Megaphone, ready: true, access: "always" },
       { href: "/dashboard/live", label: "Live Stream", icon: Radio, ready: false, access: "active" },
       { href: "/dashboard/feed", label: "Community Feed", icon: MessageSquare, ready: false, access: "active" },
       { href: "/dashboard/hangouts", label: "Social Hangouts", icon: Users, ready: false, access: "always" },
@@ -82,6 +83,7 @@ const MEMBER_NAV: NavGroup[] = [
 export function MemberNavLinks({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
   const { status, hasFullAccess } = useMemberAccess();
+  const { unread } = useUnreadAnnouncements();
 
   // Where a locked item sends the member: lapsed members go to pay dues,
   // everyone else to the Overview (where the activation prompt lives).
@@ -144,6 +146,8 @@ export function MemberNavLinks({ onNavigate }: { onNavigate?: () => void }) {
                 ? pathname === item.href
                 : pathname.startsWith(item.href);
 
+            const showDot = item.href === "/dashboard/announcements" && unread > 0;
+
             return (
               <Link
                 key={item.href}
@@ -157,7 +161,12 @@ export function MemberNavLinks({ onNavigate }: { onNavigate?: () => void }) {
                 )}
               >
                 <Icon className="h-4 w-4" />
-                {item.label}
+                <span className="flex-1">{item.label}</span>
+                {showDot && (
+                  <span className="h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-background">
+                    <span className="sr-only">New announcements</span>
+                  </span>
+                )}
               </Link>
             );
           })}
