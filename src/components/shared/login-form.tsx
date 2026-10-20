@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import Link from "next/link";
+import Image from "next/image";
 
 import { loginAction, type ActionState } from "@/server/auth/actions";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
+import { useAuthModal } from "@/components/shared/auth-modal-context";
 
 const initialState: ActionState = {};
 
@@ -23,13 +24,23 @@ export function LoginForm() {
     loginAction,
     initialState
   );
+  const { openRegisterDisclaimer } = useAuthModal();
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Log in</CardTitle>
+      <CardHeader className="justify-items-center text-center">
+        <Image
+          src="/logo.jpeg"
+          alt="Easy Run Klub"
+          width={56}
+          height={56}
+          className="rounded-full object-cover"
+        />
+        <CardTitle className="font-heading text-xl">
+          Login to Account
+        </CardTitle>
         <CardDescription>
-          Welcome back. Enter your details to continue.
+          Welcome back, login to your account
         </CardDescription>
       </CardHeader>
       <form action={formAction}>
@@ -63,17 +74,31 @@ export function LoginForm() {
               required
               placeholder="••••••••"
             />
+            <a
+              href="/forgot-password"
+              className="inline-block text-xs text-muted-foreground hover:underline"
+            >
+              Forgot password?
+            </a>
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-4">
-          <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending ? "Logging in..." : "Log in"}
+          <Button
+            type="submit"
+            disabled={isPending}
+            className="w-full rounded-full bg-brand-green text-white hover:bg-brand-green/90"
+          >
+            {isPending ? "Logging in..." : "Login"}
           </Button>
           <p className="text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{" "}
-            <Link href="/register" className="font-medium text-foreground underline underline-offset-4">
-              Join now
-            </Link>
+            First time here?{" "}
+            <button
+              type="button"
+              onClick={openRegisterDisclaimer}
+              className="font-medium text-brand-forest underline underline-offset-4"
+            >
+              Sign up
+            </button>
           </p>
         </CardFooter>
       </form>

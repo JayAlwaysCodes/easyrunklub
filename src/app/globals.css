@@ -137,3 +137,16 @@
     @apply font-sans;
   }
 }
+/* Preloader */
+@keyframes erk-splash-slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
+.erk-splash-bar {
+  animation: erk-splash-slide 1.1s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .erk-splash-bar { animation: none; width: 100%; }
+}
+/* Set by the head script when the splash was already shown this session */
+.splash-seen #erk-splash { display: none; }

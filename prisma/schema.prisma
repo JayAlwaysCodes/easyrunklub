@@ -1,5 +1,6 @@
 // EasyRunKlub - Prisma Schema
 // Module 1: Core foundation tables (Users, Roles, Memberships, Wallets, Transactions)
+// Module 3: Settings, dues, membership numbers, payment purpose
 
 generator client {
   provider = "prisma-client-js"
@@ -19,12 +20,20 @@ enum Role {
   ADMIN
 }
 
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+  PREFER_NOT_TO_SAY
+}
+
 enum MembershipStatus {
   ACTIVE
   INACTIVE
   PENDING
   CANCELLED
   EXPIRED
+  LAPSED // NEW: activated, but monthly dues are overdue past the grace period
 }
 
 enum TransactionType {
@@ -42,26 +51,49 @@ enum TransactionStatus {
   REVERSED
 }
 
+// NEW: what a payment is for, so the webhook knows how to process it
+enum TransactionPurpose {
+  ACTIVATION
+  TOPUP
+  DUES
+  OTHER
+}
+
+// NEW
+enum DuesStatus {
+  DUE
+  PAID
+  WAIVED
+}
+
 // ------------------------------------------------------------------
 // Auth
 // ------------------------------------------------------------------
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  image         String?
-  passwordHash  String?
-  role          Role      @default(MEMBER)
+  id                    String    @id @default(cuid())
+  name                  String?
+  email                 String    @unique
+  emailVerified         DateTime?
+  image                 String?
+  passwordHash          String?
+  role                  Role      @default(MEMBER)
+  phone                 String?
+  dateOfBirth           DateTime?
+  gender                Gender?
+  address               String?
+  emergencyContactName  String?
+  emergencyContactPhone String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  accounts   Account[]
-  sessions   Session[]
-  membership Membership?
-  wallet     Wallet?
+  accounts    Account[]
+  sessions    Session[]
+  membership  Membership?
+  wallet      Wallet?
+  duesCharges DuesCharge[] // NEW
+  auditLogs   AuditLog[]
 
   @@map("users")
 }
@@ -114,12 +146,13 @@ model VerificationToken {
 // ------------------------------------------------------------------
 
 model Membership {
-  id        String           @id @default(cuid())
-  userId    String           @unique
-  status    MembershipStatus @default(PENDING)
-  plan      String           @default("standard")
-  startDate DateTime?
-  endDate   DateTime?
+  id               String           @id @default(cuid())
+  userId           String           @unique
+  membershipNumber String?          @unique // NEW: e.g. ERK-000001 (encoded in the QR code)
+  status           MembershipStatus @default(PENDING)
+  plan             String           @default("standard") // all members are equal; kept for compatibility
+  startDate        DateTime?
+  endDate          DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -158,6 +191,9 @@ model Transaction {
   amount   Int // minor units; positive value, sign implied by `type`
   currency String            @default("NGN")
 
+  // NEW: why this payment exists. Null on older rows (treated as ACTIVATION).
+  purpose TransactionPurpose?
+
   // Payment-gateway readiness (populated once a gateway is integrated)
   provider          String?
   providerReference String?
@@ -168,9 +204,70 @@ model Transaction {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  wallet Wallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  wallet     Wallet      @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  duesCharge DuesCharge? // NEW
 
   @@unique([provider, providerReference])
   @@index([walletId])
   @@map("transactions")
+}
+
+// ------------------------------------------------------------------
+// NEW: Admin-editable settings (activation fee, monthly dues, grace days)
+// Values are stored as strings; money is in kobo.
+// ------------------------------------------------------------------
+
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+
+  @@map("settings")
+}
+
+// ------------------------------------------------------------------
+// NEW: One row per member per billing month
+// ------------------------------------------------------------------
+
+model DuesCharge {
+  id            String     @id @default(cuid())
+  userId        String
+  periodStart   DateTime // start of the billing month this charge covers
+  dueDate       DateTime
+  amount        Int // kobo, copied from settings when the charge is created
+  status        DuesStatus @default(DUE)
+  paidAt        DateTime?
+  paidVia       String? // "wallet" | "paystack" | "admin"
+  transactionId String?    @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transaction Transaction? @relation(fields: [transactionId], references: [id])
+
+  @@unique([userId, periodStart])
+  @@index([status, dueDate])
+  @@map("dues_charges")
+}
+
+// ------------------------------------------------------------------
+// NEW: Record of admin actions (who changed what, when)
+// ------------------------------------------------------------------
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  action     String // e.g. "settings.update"
+  targetType String?
+  targetId   String?
+  details    Json?
+  createdAt  DateTime @default(now())
+
+  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+  @@index([actorId])
+  @@index([action])
+  @@map("audit_logs")
 }

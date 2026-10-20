@@ -36,7 +36,7 @@ function NavLink({ href, label }: { href: string; label: string }) {
 
 export function PublicHeader() {
   const [open, setOpen] = useState(false);
-  const { openLogin, openRegister } = useAuthModal();
+  const { openLogin, openRegisterDisclaimer } = useAuthModal();
 
   return (
     <header className="sticky top-0 z-40   backdrop-blur rounded-3xl">
@@ -57,7 +57,7 @@ export function PublicHeader() {
             Sign in
           </button>
           <Button
-            onClick={openRegister}
+            onClick={openRegisterDisclaimer}
             className="rounded-full bg-brand-green text-white hover:bg-brand-green/90"
           >
             Sign up
@@ -94,7 +94,7 @@ export function PublicHeader() {
                   className="rounded-full bg-brand-green text-white hover:bg-brand-green/90"
                   onClick={() => {
                     setOpen(false);
-                    openRegister();
+                    openRegisterDisclaimer();
                   }}
                 >
                   Sign up

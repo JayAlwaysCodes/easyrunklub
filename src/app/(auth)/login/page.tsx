@@ -1,10 +1,7 @@
-import type { Metadata } from "next";
-import { LoginForm } from "@/components/shared/login-form";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Log in | Easy Run Klub",
-};
-
+// Login is now a modal on the homepage. This route stays so that older
+// links and Auth.js redirects still land somewhere useful.
 export default function LoginPage() {
-  return <LoginForm />;
+  redirect("/?auth=login");
 }

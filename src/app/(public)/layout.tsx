@@ -1,7 +1,10 @@
+import { Suspense } from "react";
+
 import { PublicHeader } from "@/components/layout/public/header";
 import { PublicFooter } from "@/components/layout/public/footer";
 import { AuthModalProvider } from "@/components/shared/auth-modal-context";
 import { AuthModals } from "@/components/shared/auth-modals";
+import { AuthQueryOpener } from "@/components/shared/auth-query-opener";
 
 export default function PublicLayout({
   children,
@@ -16,6 +19,9 @@ export default function PublicLayout({
         <PublicFooter />
       </div>
       <AuthModals />
+      <Suspense fallback={null}>
+        <AuthQueryOpener />
+      </Suspense>
     </AuthModalProvider>
   );
 }

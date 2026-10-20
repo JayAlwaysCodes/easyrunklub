@@ -7,7 +7,8 @@ import {
 } from "@/components/ui/dialog";
 import { useAuthModal } from "@/components/shared/auth-modal-context";
 import { LoginForm } from "@/components/shared/login-form";
-import { RegisterForm } from "@/components/shared/register-form";
+import { DisclaimerModal } from "@/components/shared/disclaimer-modal";
+import { RegisterWizard } from "@/components/shared/register-wizard";
 import { VisuallyHidden } from "@/components/ui/visually-hidden";
 
 export function AuthModals() {
@@ -18,11 +19,16 @@ export function AuthModals() {
       <DialogContent className="sm:max-w-md p-0 border-0 bg-transparent shadow-none">
         <VisuallyHidden>
           <DialogTitle>
-            {view === "login" ? "Log in" : "Sign up"}
+            {view === "login"
+              ? "Log in"
+              : view === "disclaimer"
+                ? "Before you join"
+                : "Sign up"}
           </DialogTitle>
         </VisuallyHidden>
         {view === "login" && <LoginForm />}
-        {view === "register" && <RegisterForm />}
+        {view === "disclaimer" && <DisclaimerModal />}
+        {view === "register" && <RegisterWizard />}
       </DialogContent>
     </Dialog>
   );

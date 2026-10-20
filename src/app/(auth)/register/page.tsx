@@ -1,10 +1,6 @@
-import type { Metadata } from "next";
-import { RegisterForm } from "@/components/shared/register-form";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Join | Easy Run Klub",
-};
-
+// Registration is now the disclaimer + wizard modal on the homepage.
 export default function RegisterPage() {
-  return <RegisterForm />;
+  redirect("/?auth=register");
 }

@@ -59,16 +59,29 @@ export async function registerAction(
   formData: FormData
 ): Promise<ActionState> {
   const parsed = registerSchema.safeParse({
-    name: formData.get("name"),
+    firstName: formData.get("firstName"),
+    lastName: formData.get("lastName"),
     email: formData.get("email"),
+    phone: formData.get("phone"),
     password: formData.get("password"),
+    dateOfBirth: formData.get("dateOfBirth"),
+    gender: formData.get("gender"),
+    address: formData.get("address"),
+    emergencyContactName: formData.get("emergencyContactName"),
+    emergencyContactPhone: formData.get("emergencyContactPhone"),
+    acceptedTerms: formData.get("acceptedTerms") === "on",
   });
 
   if (!parsed.success) {
     const firstError = Object.values(
       parsed.error.flatten().fieldErrors
     ).flat()[0];
-    return { error: firstError ?? "Please check your details and try again" };
+    return {
+      error:
+        typeof firstError === "string"
+          ? firstError
+          : "Please check your details and try again",
+    };
   }
 
   try {
