@@ -19,9 +19,11 @@ import { Logo } from "@/components/shared/logo";
 export function AdminTopbar({
   name,
   email,
+  isSuperAdmin,
 }: {
   name?: string | null;
   email?: string | null;
+  isSuperAdmin: boolean;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -41,7 +43,10 @@ export function AdminTopbar({
               </SheetTitle>
             </SheetHeader>
             <div className="flex flex-1 flex-col">
-              <AdminNavLinks onNavigate={() => setOpen(false)} />
+              <AdminNavLinks
+                isSuperAdmin={isSuperAdmin}
+                onNavigate={() => setOpen(false)}
+              />
               <div className="border-t p-3">
                 <Link
                   href="/dashboard"

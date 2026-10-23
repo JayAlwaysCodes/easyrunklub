@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { prisma } from "@/server/db/prisma";
-import { requireAdmin } from "@/server/auth/require-admin";
+import { requireSuperAdmin } from "@/server/auth/require-admin";
 import { logAudit } from "@/server/audit";
 import { getClubSettings, SETTING_KEYS } from "@/server/settings";
 import { clubSettingsSchema } from "@/validators/settings";
@@ -22,7 +22,7 @@ export async function updateClubSettings(
 ): Promise<SettingsActionState> {
   let adminId: string;
   try {
-    adminId = (await requireAdmin()).userId;
+    adminId = (await requireSuperAdmin()).userId;
   } catch {
     return { error: "You don't have permission to do this." };
   }

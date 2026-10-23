@@ -16,7 +16,7 @@ export async function requireActiveMember() {
   if (!session?.user) redirect("/?auth=login");
 
   const userId = session.user.id;
-  if (session.user.role === "ADMIN") return { userId };
+  if ((session.user.role === "ADMIN" || session.user.role === "SUPER_ADMIN")) return { userId };
 
   // Make sure the status is current before deciding.
   await syncMembershipDues(userId);

@@ -74,7 +74,7 @@ export const authConfig = {
       const isMemberRoute = pathname.startsWith("/dashboard");
 
       if (isAdminRoute) {
-        return isLoggedIn && auth?.user?.role === "ADMIN";
+        return isLoggedIn && (auth?.user?.role === "ADMIN" || auth?.user?.role === "SUPER_ADMIN");
       }
 
       if (isMemberRoute) {

@@ -21,7 +21,7 @@ async function main() {
       name,
       email,
       passwordHash,
-      role: "ADMIN",
+      role: "SUPER_ADMIN",
       membership: {
         create: {
           status: "ACTIVE",

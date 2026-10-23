@@ -14,6 +14,8 @@ import {
   TrendingUp,
   LifeBuoy,
   Settings,
+  UserCog,
+  ScrollText,
   ArrowLeft,
   type LucideIcon,
 } from "lucide-react";
@@ -27,6 +29,8 @@ type NavItem = {
   icon: LucideIcon;
   // Flip to true when the page exists. Unbuilt pages show "Soon".
   ready: boolean;
+  // Only the Master Admin sees this item.
+  superOnly?: boolean;
 };
 
 type NavGroup = { heading?: string; items: NavItem[] };
@@ -59,17 +63,30 @@ const ADMIN_NAV: NavGroup[] = [
     heading: "Club",
     items: [
       { href: "/admin/dashboard/reports", label: "Reports", icon: TrendingUp, ready: false },
-      { href: "/admin/dashboard/settings", label: "Settings", icon: Settings, ready: true },
+      { href: "/admin/dashboard/settings", label: "Settings", icon: Settings, ready: true, superOnly: true },
+      { href: "/admin/dashboard/admins", label: "Admins", icon: UserCog, ready: true, superOnly: true },
+      { href: "/admin/dashboard/audit-log", label: "Audit Log", icon: ScrollText, ready: true, superOnly: true },
     ],
   },
 ];
 
-export function AdminNavLinks({ onNavigate }: { onNavigate?: () => void }) {
+export function AdminNavLinks({
+  isSuperAdmin,
+  onNavigate,
+}: {
+  isSuperAdmin: boolean;
+  onNavigate?: () => void;
+}) {
   const pathname = usePathname();
+
+  const groups = ADMIN_NAV.map((group) => ({
+    ...group,
+    items: group.items.filter((item) => !item.superOnly || isSuperAdmin),
+  })).filter((group) => group.items.length > 0);
 
   return (
     <nav className="flex-1 space-y-5 overflow-y-auto p-3">
-      {ADMIN_NAV.map((group, groupIndex) => (
+      {groups.map((group, groupIndex) => (
         <div key={group.heading ?? groupIndex} className="space-y-1">
           {group.heading && (
             <p className="px-3 pb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
@@ -124,7 +141,7 @@ export function AdminNavLinks({ onNavigate }: { onNavigate?: () => void }) {
   );
 }
 
-export function AdminSidebar() {
+export function AdminSidebar({ isSuperAdmin }: { isSuperAdmin: boolean }) {
   return (
     <aside className="hidden w-64 shrink-0 border-r bg-muted/30 md:flex md:flex-col">
       <div className="flex h-16 items-center border-b px-4">
@@ -133,7 +150,7 @@ export function AdminSidebar() {
           Admin
         </span>
       </div>
-      <AdminNavLinks />
+      <AdminNavLinks isSuperAdmin={isSuperAdmin} />
       <div className="border-t p-3">
         <Link
           href="/dashboard"

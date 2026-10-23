@@ -34,7 +34,7 @@ export default async function MemberLayout({
   ]);
 
   const status = user?.membership?.status ?? null;
-  const hasFullAccess = status === "ACTIVE" || session.user.role === "ADMIN";
+  const hasFullAccess = status === "ACTIVE" || (session.user.role === "ADMIN" || session.user.role === "SUPER_ADMIN");
 
   return (
     <MemberAccessProvider status={status} hasFullAccess={hasFullAccess}>

@@ -96,7 +96,7 @@ export default async function MemberDashboardPage() {
           Here&apos;s what&apos;s happening with your Easy Run Klub
           membership.
         </p>
-        {session.user.role === "ADMIN" && (
+        {(session.user.role === "ADMIN" || session.user.role === "SUPER_ADMIN") && (
           <Link
             href="/admin/dashboard"
             className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-brand-forest underline underline-offset-4"

@@ -18,6 +18,7 @@ datasource db {
 enum Role {
   MEMBER
   ADMIN
+  SUPER_ADMIN
 }
 
 enum Gender {
