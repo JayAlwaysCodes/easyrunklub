@@ -97,6 +97,7 @@ model User {
   auditLogs   AuditLog[]
   announcements Announcement[]
   announcementsSeenAt DateTime?
+  runRsvps RunRsvp[]
 
   @@map("users")
 }
@@ -289,4 +290,75 @@ model Announcement {
 
   @@index([publishedAt])
   @@map("announcements")
+}
+
+enum RunFrequency {
+  WEEKLY
+  FORTNIGHTLY
+  MONTHLY
+}
+
+enum RunStatus {
+  SCHEDULED
+  CANCELLED
+}
+
+// The template for a repeating run. The real dates are rows in "runs".
+model RunSeries {
+  id                 String       @id @default(cuid())
+  title              String
+  description        String?
+  location           String
+  frequency          RunFrequency
+  firstRunAt         DateTime
+  endsOn             DateTime?
+  capacity           Int?
+  flyerPath          String?
+  guestsAllowed      Boolean      @default(false)
+  maxGuestsPerMember Int          @default(1)
+  createdAt          DateTime     @default(now())
+  runs               Run[]
+
+  @@map("run_series")
+}
+
+model Run {
+  id                 String     @id @default(cuid())
+  seriesId           String?
+  series             RunSeries? @relation(fields: [seriesId], references: [id], onDelete: SetNull)
+  title              String
+  description        String?
+  location           String
+  startsAt           DateTime
+  // null = no limit
+  capacity           Int?
+  flyerPath          String?
+  guestsAllowed      Boolean    @default(false)
+  maxGuestsPerMember Int        @default(1)
+  status             RunStatus  @default(SCHEDULED)
+  // true once this single run was changed on its own
+  edited             Boolean    @default(false)
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+  rsvps              RunRsvp[]
+
+  @@unique([seriesId, startsAt])
+  @@index([startsAt])
+  @@map("runs")
+}
+
+model RunRsvp {
+  id          String    @id @default(cuid())
+  runId       String
+  run         Run       @relation(fields: [runId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  guests      Int       @default(0)
+  // set when the member's QR code is scanned at the run
+  checkedInAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@unique([runId, userId])
+  @@index([userId])
+  @@map("run_rsvps")
 }

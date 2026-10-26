@@ -28,6 +28,12 @@ const ACTION_LABELS: Record<string, string> = {
   "announcement.delete": "Announcement deleted",
   "admin.add": "Admin added",
   "admin.remove": "Admin removed",
+  "run.create": "Run created",
+  "run.create_series": "Repeating run created",
+  "run.update": "Run edited",
+  "run.cancel": "Run cancelled",
+  "run.reinstate": "Run reinstated",
+  "run.end_series": "Repeating run ended",
   "report.export_members": "Members exported (CSV)",
   "report.export_payments": "Payments exported (CSV)",
 };

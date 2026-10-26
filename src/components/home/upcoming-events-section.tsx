@@ -1,10 +1,11 @@
-import Image from "next/image";
 import Link from "next/link";
 
-import { EVENTS } from "@/lib/placeholder-data/events";
+import { getPublicUpcomingRuns } from "@/server/runs/public";
+import { EventImage } from "@/components/events/event-image";
+import { formatRunWhen } from "@/lib/run-time";
 
-export function UpcomingEventsSection() {
-  const previewEvents = EVENTS.slice(0, 3);
+export async function UpcomingEventsSection() {
+  const previewEvents = await getPublicUpcomingRuns(3);
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-10 md:py-16">
@@ -20,22 +21,29 @@ export function UpcomingEventsSection() {
         </Link>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3">
-        {previewEvents.map((event) => (
-          <div key={event.id} className="space-y-3">
-            <div className="relative h-56 w-full overflow-hidden rounded-2xl">
-              <Image
-                src={event.image}
-                alt={event.title}
-                fill
-                className="object-cover"
-              />
+      {previewEvents.length === 0 ? (
+        <p className="text-muted-foreground">
+          No runs are scheduled right now. Check back soon!
+        </p>
+      ) : (
+        <div className="grid gap-6 md:grid-cols-3">
+          {previewEvents.map((event, index) => (
+            <div key={event.id} className="space-y-3">
+              <div className="relative h-56 w-full overflow-hidden rounded-2xl bg-brand-mint/30">
+                <EventImage
+                  flyerPath={event.flyerPath}
+                  title={event.title}
+                  index={index}
+                />
+              </div>
+              <h3 className="font-medium">{event.title}</h3>
+              <p className="text-sm text-muted-foreground">
+                {formatRunWhen(event.startsAt)}
+              </p>
             </div>
-            <h3 className="font-medium">{event.title}</h3>
-            <p className="text-sm text-muted-foreground">{event.date}</p>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

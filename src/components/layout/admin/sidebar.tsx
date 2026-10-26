@@ -47,7 +47,7 @@ const ADMIN_NAV: NavGroup[] = [
       { href: "/admin/dashboard/members", label: "Members", icon: Users, ready: true },
       { href: "/admin/dashboard/payments", label: "Payments", icon: CreditCard, ready: true },
       { href: "/admin/dashboard/dues", label: "Monthly Dues", icon: Receipt, ready: true },
-      { href: "/admin/dashboard/runs", label: "Runs & Events", icon: CalendarDays, ready: false },
+      { href: "/admin/dashboard/runs", label: "Runs & Events", icon: CalendarDays, ready: true },
     ],
   },
   {

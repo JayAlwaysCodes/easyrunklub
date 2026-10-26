@@ -55,7 +55,7 @@ const MEMBER_NAV: NavGroup[] = [
   {
     heading: "Running",
     items: [
-      { href: "/dashboard/runs", label: "Upcoming Runs", icon: CalendarDays, ready: false, access: "active" },
+      { href: "/dashboard/runs", label: "Upcoming Runs", icon: CalendarDays, ready: true, access: "active" },
       { href: "/dashboard/run-log", label: "Run Log", icon: Activity, ready: false, access: "always" },
       { href: "/dashboard/targets", label: "My Targets", icon: Target, ready: false, access: "always" },
       { href: "/dashboard/challenges", label: "Challenges", icon: Trophy, ready: false, access: "active" },

@@ -7,6 +7,9 @@ import { MembershipBenefitsSection } from "@/components/home/membership-benefits
 import { PartnersSection } from "@/components/home/partners-section";
 import { CtaSection } from "@/components/home/cta-section";
 
+// The upcoming-events section reads live runs from the database.
+export const dynamic = "force-dynamic";
+
 export default function HomePage() {
   return (
     <div className="bg-brand-cream">
