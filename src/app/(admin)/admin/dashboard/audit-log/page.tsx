@@ -28,6 +28,8 @@ const ACTION_LABELS: Record<string, string> = {
   "announcement.delete": "Announcement deleted",
   "admin.add": "Admin added",
   "admin.remove": "Admin removed",
+  "report.export_members": "Members exported (CSV)",
+  "report.export_payments": "Payments exported (CSV)",
 };
 
 function targetHref(targetType: string | null, targetId: string | null) {

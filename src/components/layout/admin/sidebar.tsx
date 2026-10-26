@@ -62,7 +62,7 @@ const ADMIN_NAV: NavGroup[] = [
   {
     heading: "Club",
     items: [
-      { href: "/admin/dashboard/reports", label: "Reports", icon: TrendingUp, ready: false },
+      { href: "/admin/dashboard/reports", label: "Reports", icon: TrendingUp, ready: true },
       { href: "/admin/dashboard/settings", label: "Settings", icon: Settings, ready: true, superOnly: true },
       { href: "/admin/dashboard/admins", label: "Admins", icon: UserCog, ready: true, superOnly: true },
       { href: "/admin/dashboard/audit-log", label: "Audit Log", icon: ScrollText, ready: true, superOnly: true },
