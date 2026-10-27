@@ -28,6 +28,8 @@ const ACTION_LABELS: Record<string, string> = {
   "announcement.delete": "Announcement deleted",
   "admin.add": "Admin added",
   "admin.remove": "Admin removed",
+  "payment.recheck": "Payment re-checked with Paystack",
+  "payment.reject": "Payment marked as failed",
   "run.create": "Run created",
   "run.create_series": "Repeating run created",
   "run.update": "Run edited",

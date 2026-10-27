@@ -227,7 +227,7 @@ export default async function AdminPaymentsPage({
                         (tx.purpose ? PURPOSE_LABELS[tx.purpose] : tx.type)}
                     </p>
                     <div className="flex items-center justify-between gap-3">
-                      <StatusBadge status={tx.status} />
+                      <div className="flex items-center gap-2"><StatusBadge status={tx.status} /><Link href={`/admin/dashboard/payments/${tx.id}`} className="text-xs font-medium text-brand-green hover:underline">Details</Link></div>
                       <span className="text-xs text-muted-foreground">
                         {formatDateTime(tx.createdAt)}
                       </span>
@@ -284,7 +284,7 @@ export default async function AdminPaymentsPage({
                             </p>
                           </td>
                           <td className="px-4 py-3">
-                            <StatusBadge status={tx.status} />
+                            <div className="flex items-center gap-2"><StatusBadge status={tx.status} /><Link href={`/admin/dashboard/payments/${tx.id}`} className="text-xs font-medium text-brand-green hover:underline">Details</Link></div>
                           </td>
                           <td className="whitespace-nowrap px-4 py-3 text-right font-semibold">
                             {formatNaira(tx.amount)}
